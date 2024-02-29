@@ -1,5 +1,5 @@
 //const:
-
+const url = "http://localhost:3000"
 // index.js
 /*
 steps: 
@@ -66,6 +66,7 @@ const addSubmitListener = () => {
    handleSubmit(newRamen);
   })
 };
+
 const handleSubmit= (ramen) => {
   const ramenDiv = document.querySelector("#ramen-menu");
   const img = document.createElement("img");
@@ -75,9 +76,8 @@ const handleSubmit= (ramen) => {
 };
 
 
-/* 
-displayRamens requests data from the server to get all the ramen objects
-*/
+
+
 const displayRamens = () => {
  fetch("http://localhost:3000/ramens")
  .then(response => response.json())
@@ -94,12 +94,43 @@ const displayRamens = () => {
   .catch(err => alert(err));
 };
 
+/*
+create a function displayFirstRamen
+fetch the data from the server when page loads and display its details in the
+#ramen-details div
+*/
+const displayFirstRamen = () => {
+  fetch(url + '/ramens')
+  .then(response => response.json())
+  .then(data => {
+
+    const firstRamen = data[0];
+
+    const ramenDetailDiv = document.getElementById("ramen-detail");
+    const detailImage = ramenDetailDiv.querySelector(".detail-image");
+    const detailName = ramenDetailDiv.querySelector(".name");
+    const detailRestaurant = ramenDetailDiv.querySelector(".restaurant");
+    const detailRating = document.querySelector("#rating-display");
+    const detailComment = document.querySelector("#comment-display");
+
+    detailImage.src = firstRamen.image;
+    detailName.textContent = firstRamen.name;
+    detailRestaurant.textContent = firstRamen.restaurant;
+    detailRating.textContent = firstRamen.rating;
+    detailComment.textContent = firstRamen.comment;
+  })
+  .catch(err => console.error(err));
+}
+
 const main = () => {
-  displayRamens()
-  addSubmitListener()
+  displayRamens();
+  addSubmitListener();
+  displayFirstRamen();
+  
   // Invoke displayRamens here
   // Invoke addSubmitListener here
 }
+main();
 
 // Export functions for testing
 export {
